@@ -25,6 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TaskListingComponent } from './components/task-listing/task-listing.component';
 import { TaskDeleteComponent } from './components/task-delete/task-delete.component';
 import { TaskAddComponent } from './components/task-add/task-add.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { TaskAddComponent } from './components/task-add/task-add.component';
     MdbTabsModule,
     MdbTooltipModule,
     MdbValidationModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

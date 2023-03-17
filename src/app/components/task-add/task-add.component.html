@@ -8,41 +8,44 @@
   ></button>
 </div>
 
-<div class="modal-body">
-  <form>
+<form>
+  <div class="modal-body">
     <div class="container">
       <div class="row">
         <div class="col-8">
           <div class="mb-3">
-            <label class="form-label">Title</label>
+            <label class="form-label" for="title">Title</label>
             <input
               mdbInput
               type="text"
               class="form-control"
               [(ngModel)]="newTask.title"
+              id="title"
               name="title"
               maxlength="250"
               required
             />
           </div>
           <div class="mb-3">
-            <label class="form-label">Category</label>
+            <label class="form-label" for="category">Category</label>
             <input
               mdbInput
               type="text"
               class="form-control"
               [(ngModel)]="newTask.category"
+              id="category"
               name="category"
               maxlength="2000"
               required
             />
           </div>
           <div class="mb-3">
-            <label class="form-label">Description</label>
+            <label class="form-label" for="description">Description</label>
             <textarea
               mdbInput
               class="form-control"
               [(ngModel)]="newTask.description"
+              id="description"
               name="description"
               rows="10"
               maxlength="2000"
@@ -54,23 +57,31 @@
 
         <div class="col-4">
           <div class="mb-3">
-            <label class="form-label">Due Date</label>
-            <!-- <ngb-datepicker [(ngModel)]="date" name="date"></ngb-datepicker> -->
+            <label class="form-label" for="date">Due Date</label>
+            <ngb-datepicker
+              [(ngModel)]="ngbDateStruct"
+              id="date"
+              name="date"
+            ></ngb-datepicker>
           </div>
           <div class="mb-3">
-            <label class="form-label">Due Time</label>
+            <label class="form-label" for="time">Due Time</label>
             <div class="d-flex justify-content-center">
-              <!-- <ngb-timepicker [(ngModel)]="time" name="time"></ngb-timepicker> -->
+              <ngb-timepicker
+                [(ngModel)]="ngbTimeStruct"
+                id="time"
+                name="time"
+              ></ngb-timepicker>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </form>
-</div>
+  </div>
 
-<div class="modal-footer">
-  <button type="button" class="btn btn-danger" (click)="addTaskAction()">
-    Confirm
-  </button>
-</div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-success" (click)="addTaskAction()" [disabled]="newTask.title == '' || newTask.category == ''">
+      Confirm
+    </button>
+  </div>
+</form>
