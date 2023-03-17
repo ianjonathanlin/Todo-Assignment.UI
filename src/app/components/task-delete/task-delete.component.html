@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="closeModal()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  Confirm deletion of task?
+  <br />
+  <br />
+  Title: <b>{{ task.title }}</b>
+  <br />
+  Category: <b>{{ task.category }}</b>
+  <br />
+  Due Date: <b>{{ task.dueDate | date : "medium" }}</b>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-danger"
+    (click)="deleteTaskAction(task.id!)"
+  >
+    Confirm
+  </button>
+</div>

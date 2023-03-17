@@ -1,0 +1,41 @@
+<div class="mb-3 d-flex flex-column align-items-end">
+  <button class="btn btn-warning" (click)="openAddModal()">Add New Task</button>
+</div>
+
+<mdb-accordion>
+  <mdb-accordion-item *ngFor="let task of tasks">
+    <ng-template mdbAccordionItemHeader
+      ><b>{{ task.title }}</b></ng-template
+    >
+    <ng-template mdbAccordionItemBody>
+      <b>Due Date:</b> {{ task.dueDate | date : "medium" }}
+      <br />
+      <b>Category:</b> {{ task.category }}
+      <br />
+      <br />
+      {{ task.description }}
+      <br />
+      <br />
+      <p>
+        <small>
+          <i>Created On: {{ task.created | date : "medium" }}</i>
+          <br />
+          <i>Latest Update: {{ task.updated | date : "medium" }}</i>
+        </small>
+      </p>
+      <br />
+      <br />
+      <div class="d-flex flex-row-reverse">
+        <button class="btn btn-danger" (click)="openDeleteModal(task)">
+          <i class="bi bi-trash3"></i>
+          Delete
+        </button>
+        <span class="ps-2"></span>
+        <button class="btn btn-success">
+          <i class="bi bi-pencil-square"></i>
+          Edit
+        </button>
+      </div>
+    </ng-template>
+  </mdb-accordion-item>
+</mdb-accordion>
