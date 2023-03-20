@@ -12,7 +12,6 @@ import { TaskService } from 'src/app/services/task.service';
 export class TaskUpdateComponent {
   modalTitle = 'Update Task';
   task!: Task;
-  tasks!: Task[];
   ngbDateStruct!: NgbDateStruct;
   ngbTimeStruct!: NgbTimeStruct;
 
@@ -22,10 +21,7 @@ export class TaskUpdateComponent {
   ) {}
 
   closeModal(): void {
-    this.taskService.getAllTasks().subscribe((result: Task[]) => {
-      this.tasks = result;
-      this.modalRef.close(this.tasks);
-    });
+    this.modalRef.close();
   }
 
   updateTaskAction(): void {
@@ -39,11 +35,16 @@ export class TaskUpdateComponent {
     );
     this.task.dueDate = isoDate;
 
-    this.taskService
-      .updateTask(this.task.id!, this.task)
-      .subscribe((result: Task[]) => {
-        this.tasks = result;
-        this.modalRef.close(this.tasks);
-      });
+    this.taskService.updateTask(this.task.id!, this.task).subscribe({
+      next: () => {
+        this.modalRef.close({
+          type: 'success',
+          message: 'Task updated successfully',
+        });
+      },
+      error: (err) => {
+        this.modalRef.close({ type: 'danger', message: err.error });
+      },
+    });
   }
 }

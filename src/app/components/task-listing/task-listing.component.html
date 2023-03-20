@@ -1,12 +1,20 @@
 <div class="mb-3 d-flex flex-column align-items-end">
-  <button class="btn btn-warning" (click)="openAddModal()">Add New Task</button>
+  <button class="btn btn-warning btn-lg" (click)="openAddModal()">Add New Task</button>
+</div>
+
+<div>
+  <p *ngFor="let alert of alerts">
+    <ngb-alert [type]="alert.type" (closed)="closeAlert(alert)">
+      {{ alert.message }}
+    </ngb-alert>
+  </p>
 </div>
 
 <mdb-accordion [multiple]="true">
   <mdb-accordion-item *ngFor="let task of tasks">
-    <ng-template mdbAccordionItemHeader
-      ><b>{{ task.title }}</b></ng-template
-    >
+    <ng-template mdbAccordionItemHeader>
+      <b>{{ task.title }}</b>
+    </ng-template>
     <ng-template mdbAccordionItemBody>
       <b>Due Date:</b> {{ task.dueDate | date : "medium" }}
       <br />

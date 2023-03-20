@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
+import { Alert } from 'src/app/models/alert';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -17,7 +18,6 @@ export class TaskAddComponent {
     category: '',
     dueDate: new Date(),
   };
-  tasks!: Task[];
   ngbDateStruct: NgbDateStruct;
   ngbTimeStruct: NgbTimeStruct;
 
@@ -35,14 +35,11 @@ export class TaskAddComponent {
       hour: date.getHours() + 1,
       minute: date.getMinutes(),
       second: date.getSeconds(),
-    }
+    };
   }
 
   closeModal(): void {
-    this.taskService.getAllTasks().subscribe((result: Task[]) => {
-      this.tasks = result;
-      this.modalRef.close(this.tasks);
-    });
+    this.modalRef.close();
   }
 
   addTaskAction(): void {
@@ -56,9 +53,16 @@ export class TaskAddComponent {
     );
     this.newTask.dueDate = isoDate;
 
-    this.taskService.addTask(this.newTask).subscribe((result: Task[]) => {
-      this.tasks = result;
-      this.modalRef.close(this.tasks);
+    this.taskService.addTask(this.newTask).subscribe({
+      next: () => {
+        this.modalRef.close({
+          type: 'success',
+          message: 'New task added successfully',
+        });
+      },
+      error: (err) => {
+        this.modalRef.close({ type: 'danger', message: err.error });
+      },
     });
   }
 }

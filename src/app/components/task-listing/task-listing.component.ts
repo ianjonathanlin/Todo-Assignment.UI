@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { Subscription } from 'rxjs';
+import { Alert } from 'src/app/models/alert';
 import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
 import { TaskAddComponent } from '../task-add/task-add.component';
@@ -12,10 +14,12 @@ import { TaskUpdateComponent } from '../task-update/task-update.component';
   templateUrl: './task-listing.component.html',
   styleUrls: ['./task-listing.component.scss'],
 })
-export class TaskListingComponent {
+export class TaskListingComponent implements OnInit, OnDestroy {
   pageTitle = 'To-do Application';
   tasks: Task[] = [];
+  alerts: Alert[] = [];
   modalRef: MdbModalRef<TaskDeleteComponent> | null = null;
+  sub!: Subscription;
 
   constructor(
     private taskService: TaskService,
@@ -26,13 +30,20 @@ export class TaskListingComponent {
     this.getLatestTasks();
   }
 
+  ngOnDestroy(): void {
+    this.sub.unsubscribe;
+  }
+
   openAddModal(): void {
     this.modalRef = this.modalService.open(TaskAddComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
       data: { tasks: this.tasks },
     });
 
-    this.modalRef.onClose.subscribe(() => {
+    this.modalRef.onClose.subscribe((alert: Alert) => {
+      if (alert != undefined) {
+        this.alerts.unshift(alert);
+      }
       this.getLatestTasks();
     });
   }
@@ -61,7 +72,10 @@ export class TaskListingComponent {
       },
     });
 
-    this.modalRef.onClose.subscribe((updatedTaskList: Task[]) => {
+    this.modalRef.onClose.subscribe((alert: Alert) => {
+      if (alert != undefined) {
+        this.alerts.unshift(alert);
+      }
       this.getLatestTasks();
     });
   }
@@ -71,15 +85,25 @@ export class TaskListingComponent {
       modalClass: 'modal-dialog-centered',
       data: { task: taskToBeDeleted, tasks: this.tasks },
     });
-
-    this.modalRef.onClose.subscribe((updatedTaskList: Task[]) => {
+    
+    this.modalRef.onClose.subscribe((alert: Alert) => {
+      if (alert != undefined) {
+        this.alerts.unshift(alert);
+      }
       this.getLatestTasks();
     });
   }
 
   private getLatestTasks(): void {
-    this.taskService.getAllTasks().subscribe((result: Task[]) => {
-      this.tasks = result;
+    this.sub = this.taskService.getAllTasks().subscribe({
+      next: (result) => (this.tasks = result),
+      error: (err) => {
+        this.alerts.unshift({ type: 'danger', message: err.error });
+      },
     });
+  }
+
+  closeAlert(alert: Alert) {
+    this.alerts.splice(this.alerts.indexOf(alert), 1);
   }
 }
