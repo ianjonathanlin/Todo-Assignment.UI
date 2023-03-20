@@ -26,6 +26,7 @@ import { TaskListingComponent } from './components/task-listing/task-listing.com
 import { TaskDeleteComponent } from './components/task-delete/task-delete.component';
 import { TaskAddComponent } from './components/task-add/task-add.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TaskUpdateComponent } from './components/task-update/task-update.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     TaskListingComponent,
     TaskDeleteComponent,
     TaskAddComponent,
+    TaskUpdateComponent,
   ],
   imports: [
     BrowserModule,

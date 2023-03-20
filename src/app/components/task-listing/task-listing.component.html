@@ -2,7 +2,7 @@
   <button class="btn btn-warning" (click)="openAddModal()">Add New Task</button>
 </div>
 
-<mdb-accordion>
+<mdb-accordion [multiple]="true">
   <mdb-accordion-item *ngFor="let task of tasks">
     <ng-template mdbAccordionItemHeader
       ><b>{{ task.title }}</b></ng-template
@@ -31,7 +31,7 @@
           Delete
         </button>
         <span class="ps-2"></span>
-        <button class="btn btn-success">
+        <button class="btn btn-success" (click)="openUpdateModal(task)">
           <i class="bi bi-pencil-square"></i>
           Edit
         </button>

@@ -1,7 +1,7 @@
 export class Task {
     id?: number;
     title!: string;
-    description!: string;
+    description?: string;
     dueDate!: Date;
     category!: string;
     isDeleted?: boolean;

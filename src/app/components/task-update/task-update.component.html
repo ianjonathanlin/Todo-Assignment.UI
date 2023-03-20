@@ -1,0 +1,87 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="closeModal()"
+    ></button>
+  </div>
+  
+  <form>
+    <div class="modal-body">
+      <div class="container">
+        <div class="row">
+          <div class="col-8">
+            <div class="mb-3">
+              <label class="form-label" for="title">Title</label>
+              <input
+                mdbInput
+                type="text"
+                class="form-control"
+                [(ngModel)]="task.title"
+                id="title"
+                name="title"
+                maxlength="250"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="category">Category</label>
+              <input
+                mdbInput
+                type="text"
+                class="form-control"
+                [(ngModel)]="task.category"
+                id="category"
+                name="category"
+                maxlength="2000"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="description">Description</label>
+              <textarea
+                mdbInput
+                class="form-control"
+                [(ngModel)]="task.description"
+                id="description"
+                name="description"
+                rows="10"
+                maxlength="2000"
+                style="resize: none"
+              ></textarea>
+            </div>
+          </div>
+  
+          <div class="col-4">
+            <div class="mb-3">
+              <label class="form-label" for="date">Due Date</label>
+              <ngb-datepicker #dp
+                [(ngModel)]="ngbDateStruct"
+                id="date"
+                name="date"
+                [startDate]="{year: ngbDateStruct.year, month: ngbDateStruct.month}"
+              ></ngb-datepicker>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="time">Due Time</label>
+              <div class="d-flex justify-content-center">
+                <ngb-timepicker
+                  [(ngModel)]="ngbTimeStruct"
+                  id="time"
+                  name="time"
+                ></ngb-timepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" (click)="updateTaskAction()" [disabled]="task.title == '' || task.category == ''">
+        Confirm
+      </button>
+    </div>
+  </form>

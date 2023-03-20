@@ -32,7 +32,7 @@ export class TaskAddComponent {
       year: date.getFullYear(),
     };
     this.ngbTimeStruct = {
-      hour: date.getHours(),
+      hour: date.getHours() + 1,
       minute: date.getMinutes(),
       second: date.getSeconds(),
     }
