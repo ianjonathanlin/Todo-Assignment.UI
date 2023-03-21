@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
-import { Alert } from 'src/app/models/alert';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 

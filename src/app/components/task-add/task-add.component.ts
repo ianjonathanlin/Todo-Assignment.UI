@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
-import { Alert } from 'src/app/models/alert';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -43,6 +42,9 @@ export class TaskAddComponent {
   }
 
   addTaskAction(): void {
+
+    //check for title and category if empty?
+
     let isoDate: Date = new Date(
       this.ngbDateStruct.year,
       this.ngbDateStruct.month - 1,
