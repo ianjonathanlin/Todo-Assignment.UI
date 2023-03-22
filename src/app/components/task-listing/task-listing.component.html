@@ -1,49 +1,61 @@
-<div class="mb-3 d-flex flex-column align-items-end">
-  <button class="btn btn-warning btn-lg" (click)="openAddModal()">Add New Task</button>
-</div>
+<div *ngIf="authService.authStatus">
+  <div class="mb-4 d-flex flex-column align-items-end">
+    <button class="btn btn-warning btn-lg me-1" (click)="openAddModal()">
+      Add New Task
+    </button>
+  </div>
 
-<div>
-  <p *ngFor="let alert of alerts">
-    <ngb-alert [type]="alert.type" (closed)="closeAlert(alert)">
-      {{ alert.message }}
-    </ngb-alert>
-  </p>
+  <mdb-accordion [multiple]="true">
+    <mdb-accordion-item *ngFor="let task of getTasksService.tasks">
+      <ng-template mdbAccordionItemHeader>
+        <p
+          style="display: inline"
+          class="fw-bold"
+          [ngClass]="
+            currentDateTime > task.dueDate ? 'text-danger' : 'text-body'
+          "
+        >
+          {{ task.title }}
+        </p>
+      </ng-template>
+      <ng-template mdbAccordionItemBody>
+        <b>Due Date:</b>
+        <p
+          style="display: inline"
+          [ngClass]="
+            currentDateTime > task.dueDate ? 'text-danger' : 'text-body'
+          "
+        >
+          {{ task.dueDate | date : "medium" }}
+        </p>
+        <br />
+        <b>Category:</b> {{ task.category }}
+        <br />
+        <br />
+        {{ task.description }}
+        <br />
+        <br />
+        <p>
+          <small>
+            <i>Created On: {{ task.created | date : "medium" }}</i>
+            <br />
+            <i>Latest Update: {{ task.updated | date : "medium" }}</i>
+          </small>
+        </p>
+        <br />
+        <br />
+        <div class="d-flex flex-row-reverse">
+          <button class="btn btn-danger btn-lg" (click)="openDeleteModal(task)">
+            <i class="bi bi-trash3"></i>
+            Delete
+          </button>
+          <span class="ps-2"></span>
+          <button class="btn btn-success btn-lg" (click)="openUpdateModal(task)">
+            <i class="bi bi-pencil-square"></i>
+            Edit
+          </button>
+        </div>
+      </ng-template>
+    </mdb-accordion-item>
+  </mdb-accordion>
 </div>
-
-<mdb-accordion [multiple]="true">
-  <mdb-accordion-item *ngFor="let task of tasks">
-    <ng-template mdbAccordionItemHeader>
-      <b>{{ task.title }}</b>
-    </ng-template>
-    <ng-template mdbAccordionItemBody>
-      <b>Due Date:</b> {{ task.dueDate | date : "medium" }}
-      <br />
-      <b>Category:</b> {{ task.category }}
-      <br />
-      <br />
-      {{ task.description }}
-      <br />
-      <br />
-      <p>
-        <small>
-          <i>Created On: {{ task.created | date : "medium" }}</i>
-          <br />
-          <i>Latest Update: {{ task.updated | date : "medium" }}</i>
-        </small>
-      </p>
-      <br />
-      <br />
-      <div class="d-flex flex-row-reverse">
-        <button class="btn btn-danger" (click)="openDeleteModal(task)">
-          <i class="bi bi-trash3"></i>
-          Delete
-        </button>
-        <span class="ps-2"></span>
-        <button class="btn btn-success" (click)="openUpdateModal(task)">
-          <i class="bi bi-pencil-square"></i>
-          Edit
-        </button>
-      </div>
-    </ng-template>
-  </mdb-accordion-item>
-</mdb-accordion>

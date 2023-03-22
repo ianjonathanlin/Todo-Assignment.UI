@@ -3,6 +3,7 @@ import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-task-add',
@@ -11,18 +12,14 @@ import { TaskService } from 'src/app/services/task.service';
 })
 export class TaskAddComponent {
   modalTitle = 'Add New Task';
-  newTask: Task = {
-    title: '',
-    description: '',
-    category: '',
-    dueDate: new Date(),
-  };
+  newTask = new Task();
   ngbDateStruct: NgbDateStruct;
   ngbTimeStruct: NgbTimeStruct;
 
   constructor(
     private taskService: TaskService,
-    public modalRef: MdbModalRef<TaskAddComponent>
+    private toastService: ToastService,
+    private modalRef: MdbModalRef<TaskAddComponent>
   ) {
     let date = new Date();
     this.ngbDateStruct = {
@@ -42,9 +39,6 @@ export class TaskAddComponent {
   }
 
   addTaskAction(): void {
-
-    //check for title and category if empty?
-
     let isoDate: Date = new Date(
       this.ngbDateStruct.year,
       this.ngbDateStruct.month - 1,
@@ -58,12 +52,33 @@ export class TaskAddComponent {
     this.taskService.addTask(this.newTask).subscribe({
       next: () => {
         this.modalRef.close({
-          type: 'success',
-          message: 'New task added successfully',
+          id: this.toastService.toasts.length + 1,
+          message: 'New task added successfully.',
+          classname: 'bg-success text-light',
+          autohide: true,
+          delay: 5000,
         });
       },
       error: (err) => {
-        this.modalRef.close({ type: 'danger', message: err.error });
+        if (err.status == 401) {
+          let t = this.toastService.getToastByMessage('Please Login.');
+          if (t == undefined) {
+            this.toastService.show({
+              id: this.toastService.toasts.length + 1,
+              message: 'Please Login.',
+              classname: 'bg-dark text-light',
+            });
+          }
+        } else {
+          this.modalRef.close({
+            id: this.toastService.toasts.length + 1,
+            message: err.error,
+            classname: 'bg-danger text-light',
+            autohide: true,
+            delay: 10000,
+          });
+        }
+        this.modalRef.close();
       },
     });
   }

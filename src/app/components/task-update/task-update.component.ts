@@ -3,6 +3,7 @@ import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-task-update',
@@ -17,7 +18,8 @@ export class TaskUpdateComponent {
 
   constructor(
     private taskService: TaskService,
-    public modalRef: MdbModalRef<TaskUpdateComponent>
+    private toastService: ToastService,
+    private modalRef: MdbModalRef<TaskUpdateComponent>
   ) {}
 
   closeModal(): void {
@@ -35,15 +37,38 @@ export class TaskUpdateComponent {
     );
     this.task.dueDate = isoDate;
 
+    console.log(this.task);
+
     this.taskService.updateTask(this.task.id!, this.task).subscribe({
       next: () => {
         this.modalRef.close({
-          type: 'success',
-          message: 'Task updated successfully',
+          id: this.toastService.toasts.length + 1,
+          message: 'Task updated successfully.',
+          classname: 'bg-success text-light',
+          autohide: true,
+          delay: 5000,
         });
       },
       error: (err) => {
-        this.modalRef.close({ type: 'danger', message: err.error });
+        if (err.status == 401) {
+          let t = this.toastService.getToastByMessage('Please Login.');
+          if (t == undefined) {
+            this.toastService.show({
+              id: this.toastService.toasts.length + 1,
+              message: 'Please Login.',
+              classname: 'bg-dark text-light',
+            });
+          }
+        } else {
+          this.modalRef.close({
+            id: this.toastService.toasts.length + 1,
+            message: err.error,
+            classname: 'bg-danger text-light',
+            autohide: true,
+            delay: 10000,
+          });
+        }
+        this.modalRef.close();
       },
     });
   }

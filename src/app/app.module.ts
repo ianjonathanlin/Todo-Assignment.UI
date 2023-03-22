@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
@@ -27,6 +27,9 @@ import { TaskDeleteComponent } from './components/task-delete/task-delete.compon
 import { TaskAddComponent } from './components/task-add/task-add.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TaskUpdateComponent } from './components/task-update/task-update.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { ToastsContainer } from './components/toasts-container.component';
 
 @NgModule({
   declarations: [
@@ -35,8 +38,10 @@ import { TaskUpdateComponent } from './components/task-update/task-update.compon
     TaskDeleteComponent,
     TaskAddComponent,
     TaskUpdateComponent,
+    LoginComponent
   ],
   imports: [
+    ToastsContainer,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -59,7 +64,11 @@ import { TaskUpdateComponent } from './components/task-update/task-update.compon
     BrowserAnimationsModule,
     NgbModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

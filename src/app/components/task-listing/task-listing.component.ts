@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { Subscription } from 'rxjs';
-import { Alert } from 'src/app/models/alert';
+import { Toast } from 'src/app/models/toast';
+import { AuthService } from 'src/app/services/auth.service';
+import { GetTasksService } from 'src/app/services/getTasks.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { Task } from '../../models/task';
-import { TaskService } from '../../services/task.service';
 import { TaskAddComponent } from '../task-add/task-add.component';
 import { TaskDeleteComponent } from '../task-delete/task-delete.component';
 import { TaskUpdateComponent } from '../task-update/task-update.component';
@@ -14,41 +15,46 @@ import { TaskUpdateComponent } from '../task-update/task-update.component';
   templateUrl: './task-listing.component.html',
   styleUrls: ['./task-listing.component.scss'],
 })
-export class TaskListingComponent implements OnInit, OnDestroy {
+export class TaskListingComponent {
   pageTitle = 'To-do Application';
-  tasks: Task[] = [];
-  alerts: Alert[] = [];
-  modalRef: MdbModalRef<TaskDeleteComponent> | null = null;
-  sub!: Subscription;
+  modalRef: MdbModalRef<any> | null = null;
+  currentDateTime = new Date();
 
   constructor(
-    private taskService: TaskService,
-    private modalService: MdbModalService
-  ) {}
-
-  ngOnInit(): void {
-    this.getLatestTasks();
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe;
+    public getTasksService: GetTasksService,
+    private toastService: ToastService,
+    private modalService: MdbModalService,
+    public authService: AuthService
+  ) {
+    
   }
 
   openAddModal(): void {
     this.modalRef = this.modalService.open(TaskAddComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
-      data: { tasks: this.tasks },
     });
 
-    this.modalRef.onClose.subscribe((alert: Alert) => {
-      if (alert != undefined) {
-        this.alerts.unshift(alert);
+    this.modalRef.onClose.subscribe((toast: Toast | undefined) => {
+      if (toast) {
+        this.toastService.show(toast);
       }
-      this.getLatestTasks();
+      this.getTasksService.getLatestTasks();
     });
   }
 
   openUpdateModal(taskToBeUpdated: Task): void {
+
+    let task: Task = {
+      id: taskToBeUpdated.id,
+      title: taskToBeUpdated.title,
+      category: taskToBeUpdated.category,
+      description: taskToBeUpdated.description,
+      dueDate: taskToBeUpdated.dueDate,
+      isDeleted: taskToBeUpdated.isDeleted,
+      created: taskToBeUpdated.created,
+      updated: taskToBeUpdated.updated
+    };
+
     let taskDueDate = new Date(taskToBeUpdated.dueDate);
 
     let ngbDateStruct: NgbDateStruct = {
@@ -65,45 +71,31 @@ export class TaskListingComponent implements OnInit, OnDestroy {
     this.modalRef = this.modalService.open(TaskUpdateComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
       data: {
-        task: taskToBeUpdated,
+        task: task,
         ngbDateStruct: ngbDateStruct,
         ngbTimeStruct: ngbTimeStruct,
-        tasks: this.tasks,
       },
     });
 
-    this.modalRef.onClose.subscribe((alert: Alert) => {
-      if (alert != undefined) {
-        this.alerts.unshift(alert);
+    this.modalRef.onClose.subscribe((toast: Toast | undefined) => {
+      if (toast) {
+        this.toastService.show(toast);
       }
-      this.getLatestTasks();
+      this.getTasksService.getLatestTasks();
     });
   }
 
   openDeleteModal(taskToBeDeleted: Task): void {
     this.modalRef = this.modalService.open(TaskDeleteComponent, {
       modalClass: 'modal-dialog-centered',
-      data: { task: taskToBeDeleted, tasks: this.tasks },
+      data: { task: taskToBeDeleted },
     });
-    
-    this.modalRef.onClose.subscribe((alert: Alert) => {
-      if (alert != undefined) {
-        this.alerts.unshift(alert);
+
+    this.modalRef.onClose.subscribe((toast: Toast | undefined) => {
+      if (toast) {
+        this.toastService.show(toast);
       }
-      this.getLatestTasks();
+      this.getTasksService.getLatestTasks();
     });
-  }
-
-  private getLatestTasks(): void {
-    this.sub = this.taskService.getAllTasks().subscribe({
-      next: (result) => (this.tasks = result),
-      error: (err) => {
-        this.alerts.unshift({ type: 'danger', message: err.error });
-      },
-    });
-  }
-
-  closeAlert(alert: Alert) {
-    this.alerts.splice(this.alerts.indexOf(alert), 1);
   }
 }

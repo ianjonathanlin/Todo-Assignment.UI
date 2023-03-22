@@ -3,12 +3,23 @@
     <a class="navbar-brand mb-0 h1 ms-2" href=".">
       {{ pageTitle }}
     </a>
-    <div>
-      <span class="navbar-nav me-auto mb-lg-0"></span>
-      <a href="" class="btn btn-dark me-1">Login</a>
+    <span class="navbar-nav me-auto mb-lg-0"></span>
+    <div *ngIf="!authService.authStatus">
+      <a class="btn btn-dark btn-lg me-1" (click)="openLoginModal()">Login</a>
+      <span class="px-1"></span>
+      <a class="btn btn-secondary btn-lg me-1">Register</a>
+    </div>
+    <div *ngIf="authService.authStatus">
+      <p class="text-light fs-5" style="display: inline">
+        Hello, <u>{{ authService.userName }}</u>!
+      </p>
+      <span class="px-2"></span>
+      <a class="btn btn-dark btn-lg me-1" (click)="logout()">Logout</a>
     </div>
   </div>
 </nav>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
 <div class="container-fluid pt-3">
   <app-task-listing></app-task-listing>
