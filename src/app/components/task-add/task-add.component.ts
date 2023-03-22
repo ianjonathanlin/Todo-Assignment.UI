@@ -12,7 +12,12 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class TaskAddComponent {
   modalTitle = 'Add New Task';
-  newTask = new Task();
+  newTask: Task = {
+    title: '',
+    category: '',
+    description: '',
+    dueDate: new Date()
+  };
   ngbDateStruct: NgbDateStruct;
   ngbTimeStruct: NgbTimeStruct;
 
@@ -61,11 +66,11 @@ export class TaskAddComponent {
       },
       error: (err) => {
         if (err.status == 401) {
-          let t = this.toastService.getToastByMessage('Please Login.');
+          let t = this.toastService.getToastByMessage('Please Login or Register.');
           if (t == undefined) {
             this.toastService.show({
               id: this.toastService.toasts.length + 1,
-              message: 'Please Login.',
+              message: 'Please Login or Register.',
               classname: 'bg-dark text-light',
             });
           }

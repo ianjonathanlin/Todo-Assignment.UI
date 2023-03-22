@@ -36,11 +36,11 @@ export class TaskDeleteComponent {
       },
       error: (err) => {
         if (err.status == 401) {
-          let t = this.toastService.getToastByMessage('Please Login.');
+          let t = this.toastService.getToastByMessage('Please Login or Register.');
           if (t == undefined) {
             this.toastService.show({
               id: this.toastService.toasts.length + 1,
-              message: 'Please Login.',
+              message: 'Please Login or Register.',
               classname: 'bg-dark text-light',
             });
           }

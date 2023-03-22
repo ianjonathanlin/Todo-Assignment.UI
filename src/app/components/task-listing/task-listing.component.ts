@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { Toast } from 'src/app/models/toast';
+import { IToast } from 'src/app/models/toast';
 import { AuthService } from 'src/app/services/auth.service';
 import { GetTasksService } from 'src/app/services/getTasks.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -25,16 +25,14 @@ export class TaskListingComponent {
     private toastService: ToastService,
     private modalService: MdbModalService,
     public authService: AuthService
-  ) {
-    
-  }
+  ) {}
 
   openAddModal(): void {
     this.modalRef = this.modalService.open(TaskAddComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
     });
 
-    this.modalRef.onClose.subscribe((toast: Toast | undefined) => {
+    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
       if (toast) {
         this.toastService.show(toast);
       }
@@ -43,7 +41,6 @@ export class TaskListingComponent {
   }
 
   openUpdateModal(taskToBeUpdated: Task): void {
-
     let task: Task = {
       id: taskToBeUpdated.id,
       title: taskToBeUpdated.title,
@@ -52,7 +49,7 @@ export class TaskListingComponent {
       dueDate: taskToBeUpdated.dueDate,
       isDeleted: taskToBeUpdated.isDeleted,
       created: taskToBeUpdated.created,
-      updated: taskToBeUpdated.updated
+      updated: taskToBeUpdated.updated,
     };
 
     let taskDueDate = new Date(taskToBeUpdated.dueDate);
@@ -77,7 +74,7 @@ export class TaskListingComponent {
       },
     });
 
-    this.modalRef.onClose.subscribe((toast: Toast | undefined) => {
+    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
       if (toast) {
         this.toastService.show(toast);
       }
@@ -91,7 +88,7 @@ export class TaskListingComponent {
       data: { task: taskToBeDeleted },
     });
 
-    this.modalRef.onClose.subscribe((toast: Toast | undefined) => {
+    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
       if (toast) {
         this.toastService.show(toast);
       }

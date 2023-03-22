@@ -9,14 +9,28 @@
 </div>
 
 <div class="modal-body">
-  <div>
-    Username:
-    <input mdbInput type="text" [(ngModel)]="loginUser.userName" required/>
-  </div>
-  <div>
-    Password:
-    <input mdbInput type="password" [(ngModel)]="loginUser.password" required/>
-  </div>
+  <mdb-form-control class="mb-3">
+    <input
+      mdbInput
+      type="text"
+      id="userName"
+      class="form-control form-control-lg"
+      [(ngModel)]="loginUser.userName"
+      required
+    />
+    <label mdbLabel class="form-label" for="userName">UserName</label>
+  </mdb-form-control>
+  <mdb-form-control class="mb-3">
+    <input
+      mdbInput
+      type="password"
+      id="password"
+      class="form-control form-control-lg"
+      [(ngModel)]="loginUser.password"
+      required
+    />
+    <label mdbLabel class="form-label" for="password">Password</label>
+  </mdb-form-control>
 </div>
 
 <div class="modal-footer">

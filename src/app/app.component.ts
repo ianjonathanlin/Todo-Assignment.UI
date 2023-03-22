@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { LoginComponent } from './components/login/login.component';
-import { Toast } from './models/toast';
+import { IToast } from './models/toast';
 import { AuthService } from './services/auth.service';
 import { GetTasksService } from './services/getTasks.service';
 import { ToastService } from './services/toast.service';
@@ -55,9 +55,9 @@ export class AppComponent implements OnInit, OnDestroy {
       modalClass: 'modal-lg modal-dialog-centered',
     });
 
-    this.modalRef.onClose.subscribe((toast: Toast | undefined) => {
+    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
       if (toast) {
-        let t = this.toastService.getToastByMessage('Please Login.');
+        let t = this.toastService.getToastByMessage('Please Login or Register.');
         if (t != null) {
           this.toastService.remove(t);
         }

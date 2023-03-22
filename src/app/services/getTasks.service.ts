@@ -21,7 +21,7 @@ export class GetTasksService implements OnDestroy {
   getLatestTasks(): void {
     this.taskService.getAllTasks().subscribe({
       next: (result) => {
-        this.tasks = result.map(task => {
+        this.tasks = result.map((task) => {
           task.dueDate = new Date(task.dueDate);
           return task;
         });
@@ -30,7 +30,7 @@ export class GetTasksService implements OnDestroy {
         if (err.status == 401) {
           this.toastService.show({
             id: this.toastService.toasts.length + 1,
-            message: 'Please Login.',
+            message: 'Please Login or Register.',
             classname: 'bg-dark text-light',
           });
         } else {

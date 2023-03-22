@@ -10,7 +10,7 @@ import { ToastService } from 'src/app/services/toast.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  modalTitle = 'Add New Task';
+  modalTitle = 'Login User';
   loginUser = new User();
 
   constructor(
