@@ -11,10 +11,6 @@ export class ToastService {
     this.toasts.push(toast);
   }
 
-  getToastByMessage(message: string) {
-    return this.toasts.find((t) => t.message == message);
-  }
-
   remove(toast: IToast) {
     this.toasts = this.toasts.filter((t) => t !== toast);
   }

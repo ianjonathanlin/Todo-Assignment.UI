@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IToast } from '../models/toast';
 import { AuthService } from './auth.service';
-import { GetTasksService } from './getTasks.service';
 import { ToastService } from './toast.service';
 
 @Injectable({
@@ -11,7 +10,6 @@ export class LogoutService {
   constructor(
     private authService: AuthService,
     private toastService: ToastService,
-    private getTasksService: GetTasksService
   ) {}
 
   logout(toast: IToast | undefined) {

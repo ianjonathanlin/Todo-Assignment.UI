@@ -27,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Check if authToken is expired when initialized
+    // authToken should not be deleted though...
     let token = localStorage.getItem('authToken');
     if (token) {
       let decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
@@ -72,7 +73,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (toast) {
         let token = localStorage.getItem('authToken');
 
-        // If login success / has authToken
+        // If login success / acquired authToken
         if (token) {
           this.toastService.clear();
           this.toastService.show(toast);
