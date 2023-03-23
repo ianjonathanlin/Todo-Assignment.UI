@@ -29,13 +29,11 @@ export class GetTasksService implements OnDestroy {
       error: (err) => {
         if (err.status == 401) {
           this.toastService.show({
-            id: this.toastService.toasts.length + 1,
             message: 'Please Login or Register.',
             classname: 'bg-dark text-light',
           });
         } else {
           this.toastService.show({
-            id: this.toastService.toasts.length + 1,
             message: err.error,
             classname: 'bg-danger text-light',
             autohide: true,

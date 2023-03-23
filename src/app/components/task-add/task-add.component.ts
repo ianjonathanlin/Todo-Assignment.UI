@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { Task } from 'src/app/models/task';
+import { LogoutService } from 'src/app/services/logout.service';
 import { TaskService } from 'src/app/services/task.service';
-import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-task-add',
@@ -16,14 +16,14 @@ export class TaskAddComponent {
     title: '',
     category: '',
     description: '',
-    dueDate: new Date()
+    dueDate: new Date(),
   };
   ngbDateStruct: NgbDateStruct;
   ngbTimeStruct: NgbTimeStruct;
 
   constructor(
     private taskService: TaskService,
-    private toastService: ToastService,
+    private logoutService: LogoutService,
     private modalRef: MdbModalRef<TaskAddComponent>
   ) {
     let date = new Date();
@@ -57,7 +57,6 @@ export class TaskAddComponent {
     this.taskService.addTask(this.newTask).subscribe({
       next: () => {
         this.modalRef.close({
-          id: this.toastService.toasts.length + 1,
           message: 'New task added successfully.',
           classname: 'bg-success text-light',
           autohide: true,
@@ -66,24 +65,16 @@ export class TaskAddComponent {
       },
       error: (err) => {
         if (err.status == 401) {
-          let t = this.toastService.getToastByMessage('Please Login or Register.');
-          if (t == undefined) {
-            this.toastService.show({
-              id: this.toastService.toasts.length + 1,
-              message: 'Please Login or Register.',
-              classname: 'bg-dark text-light',
-            });
-          }
+          this.modalRef.close();
+          this.logoutService.logout(undefined);
         } else {
           this.modalRef.close({
-            id: this.toastService.toasts.length + 1,
             message: err.error,
             classname: 'bg-danger text-light',
             autohide: true,
             delay: 10000,
           });
         }
-        this.modalRef.close();
       },
     });
   }

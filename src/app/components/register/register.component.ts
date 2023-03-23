@@ -2,36 +2,32 @@ import { Component } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
 })
-export class LoginComponent {
-  modalTitle = 'Login User';
-  loginUser = new User();
+export class RegisterComponent {
+  modalTitle = 'Register New User';
+  registerUser = new User();
 
   constructor(
     private authService: AuthService,
-    private modalRef: MdbModalRef<LoginComponent>
-  ) {
-    // DELETE THIS
-    this.loginUser.userName = 'ianjonathanlin';
-    this.loginUser.password = '12345';
-  }
+    private toastService: ToastService,
+    private modalRef: MdbModalRef<RegisterComponent>
+  ) {}
 
   closeModal(): void {
     this.modalRef.close();
   }
 
-  login(): void {
-    this.authService.authenticate(this.loginUser).subscribe({
-      next: (token: string) => {
-        localStorage.setItem('authToken', token);
-        
+  register(): void {
+    this.authService.register(this.registerUser).subscribe({
+      next: () => {
         this.modalRef.close({
-          message: "Login Success.",
+          message: "New user registered successfully.",
           classname: 'bg-success text-light',
           autohide: true,
           delay: 5000,

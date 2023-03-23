@@ -7,7 +7,7 @@
     <div *ngIf="!authService.authStatus">
       <a class="btn btn-dark btn-lg me-1" (click)="openLoginModal()">Login</a>
       <span class="px-1"></span>
-      <a class="btn btn-secondary btn-lg me-1">Register</a>
+      <a class="btn btn-secondary btn-lg me-1" (click)="openRegisterModal()">Register</a>
     </div>
     <div *ngIf="authService.authStatus">
       <p class="text-light fs-5" style="display: inline">

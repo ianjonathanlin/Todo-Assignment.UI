@@ -30,6 +30,7 @@ import { TaskUpdateComponent } from './components/task-update/task-update.compon
 import { LoginComponent } from './components/login/login.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { ToastsContainer } from './components/toasts-container.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ToastsContainer } from './components/toasts-container.component';
     TaskDeleteComponent,
     TaskAddComponent,
     TaskUpdateComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     ToastsContainer,

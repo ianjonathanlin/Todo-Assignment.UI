@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { Task } from 'src/app/models/task';
+import { LogoutService } from 'src/app/services/logout.service';
 import { TaskService } from 'src/app/services/task.service';
-import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-task-delete',
@@ -15,7 +15,7 @@ export class TaskDeleteComponent {
 
   constructor(
     private taskService: TaskService,
-    private toastService: ToastService,
+    private logoutService: LogoutService,
     private modalRef: MdbModalRef<TaskDeleteComponent>
   ) {}
 
@@ -27,7 +27,6 @@ export class TaskDeleteComponent {
     this.taskService.deleteTask(taskId).subscribe({
       next: () => {
         this.modalRef.close({
-          id: this.toastService.toasts.length + 1,
           message: 'Task deleted successfully',
           classname: 'bg-success text-light',
           autohide: true,
@@ -36,24 +35,16 @@ export class TaskDeleteComponent {
       },
       error: (err) => {
         if (err.status == 401) {
-          let t = this.toastService.getToastByMessage('Please Login or Register.');
-          if (t == undefined) {
-            this.toastService.show({
-              id: this.toastService.toasts.length + 1,
-              message: 'Please Login or Register.',
-              classname: 'bg-dark text-light',
-            });
-          }
+          this.modalRef.close();
+          this.logoutService.logout(undefined);
         } else {
           this.modalRef.close({
-            id: this.toastService.toasts.length + 1,
             message: err.error,
             classname: 'bg-danger text-light',
             autohide: true,
             delay: 10000,
           });
         }
-        this.modalRef.close();
       },
     });
   }
