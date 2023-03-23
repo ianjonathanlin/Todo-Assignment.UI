@@ -4,8 +4,9 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { IToast } from './models/toast';
 import { AuthService } from './services/auth.service';
-import { GetTasksService } from './services/getTasks.service';
+import { GetTasksService } from './services/get-tasks.service';
 import { LogoutService } from './services/logout.service';
+import { RefreshTokenService } from './services/refresh-token.service';
 import { ToastService } from './services/toast.service';
 
 @Component({
@@ -22,27 +23,18 @@ export class AppComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private getTasksService: GetTasksService,
     public authService: AuthService,
-    private logoutService: LogoutService
+    private logoutService: LogoutService,
+    private refreshTokenService: RefreshTokenService
   ) {}
 
   ngOnInit(): void {
-    // Check if authToken is expired when initialized
-    // authToken should not be deleted though...
     let token = localStorage.getItem('authToken');
-    if (token) {
+    if (token && !this.refreshTokenService.checkTokenExpired()) {
       let decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
-
-      let tokenExpiryDate = new Date(0);
-      tokenExpiryDate.setUTCSeconds(decodedJWT.exp);
-
-      let current = new Date();
-
-      if (current < tokenExpiryDate) {
-        this.authService.authStatus = true;
-        this.authService.userName = decodedJWT.userName;
-      } else {
-        this.logoutService.logout(undefined);
-      }
+      this.authService.authStatus = true;
+      this.authService.userName = decodedJWT.userName;
+    } else {
+      this.logoutService.logout(undefined);
     }
 
     this.getTasksService.getLatestTasks();
@@ -77,9 +69,9 @@ export class AppComponent implements OnInit, OnDestroy {
         if (token) {
           this.toastService.clear();
           this.toastService.show(toast);
-          
+
           this.authService.authStatus = true;
-          
+
           let decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
           this.authService.userName = decodedJWT.userName;
 
@@ -100,7 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
     };
 
     this.logoutService.logout(logoutToast);
-    
+
     this.getTasksService.getLatestTasks();
   }
 }

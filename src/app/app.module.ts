@@ -40,7 +40,7 @@ import { RegisterComponent } from './components/register/register.component';
     TaskAddComponent,
     TaskUpdateComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   imports: [
     ToastsContainer,
@@ -64,13 +64,15 @@ import { RegisterComponent } from './components/register/register.component';
     MdbTooltipModule,
     MdbValidationModule,
     BrowserAnimationsModule,
-    NgbModule
+    NgbModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  }],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

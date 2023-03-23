@@ -50,8 +50,12 @@ export class TaskUpdateComponent {
       },
       error: (err) => {
         if (err.status == 401) {
-          this.modalRef.close();
-          this.logoutService.logout(undefined);
+          this.modalRef.close({
+            message: "Unauthorized access.",
+            classname: 'bg-danger text-light',
+            autohide: true,
+            delay: 10000,
+          });
         } else {
           this.modalRef.close({
             message: err.error,

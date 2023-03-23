@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
+import { IAuthenticatedResponse } from 'src/app/models/authResponse';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -27,8 +28,9 @@ export class LoginComponent {
 
   login(): void {
     this.authService.authenticate(this.loginUser).subscribe({
-      next: (token: string) => {
-        localStorage.setItem('authToken', token);
+      next: (response: IAuthenticatedResponse) => {
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('refreshToken', response.refreshToken);
         
         this.modalRef.close({
           message: "Login Success.",

@@ -3,7 +3,7 @@ import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { IToast } from 'src/app/models/toast';
 import { AuthService } from 'src/app/services/auth.service';
-import { GetTasksService } from 'src/app/services/getTasks.service';
+import { GetTasksService } from 'src/app/services/get-tasks.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { Task } from '../../models/task';
 import { TaskAddComponent } from '../task-add/task-add.component';

@@ -14,6 +14,8 @@ export class LogoutService {
 
   logout(toast: IToast | undefined) {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
+
     this.authService.authStatus = false;
     this.authService.userName = '';
 
