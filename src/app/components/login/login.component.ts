@@ -5,6 +5,8 @@ import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { GetTasksService } from 'src/app/services/get-tasks.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { IToken } from 'src/app/models/token';
+import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-login',
@@ -38,7 +40,7 @@ export class LoginComponent {
         localStorage.setItem('refreshToken', response.refreshToken);
 
         // set login status and username
-        let decodedJWT = JSON.parse(window.atob(response.token.split('.')[1]));
+        let decodedJWT: IToken = jwt_decode(response.token);
         this.authService.authStatus = true;
         this.authService.userName = decodedJWT.userName;
 

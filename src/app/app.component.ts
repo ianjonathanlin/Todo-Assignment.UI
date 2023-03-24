@@ -4,8 +4,6 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
 import { GetTasksService } from './services/get-tasks.service';
-import { LogoutService } from './services/logout.service';
-import { RefreshTokenService } from './services/refresh-token.service';
 import { ToastService } from './services/toast.service';
 
 @Component({
@@ -20,9 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private modalService: MdbModalService,
     private toastService: ToastService,
     private getTasksService: GetTasksService,
-    public authService: AuthService,
-    private logoutService: LogoutService,
-    private refreshTokenService: RefreshTokenService
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -50,9 +46,5 @@ export class AppComponent implements OnInit, OnDestroy {
     this.modalService.open(LoginComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
     });
-  }
-
-  logout(): void {
-    this.logoutService.logout();
   }
 }

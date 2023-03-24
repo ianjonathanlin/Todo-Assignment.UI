@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Task } from '../models/task';
-import { RefreshTokenService } from './refresh-token.service';
 import { TaskService } from './task.service';
 import { ToastService } from './toast.service';
 
@@ -13,7 +12,6 @@ export class GetTasksService implements OnDestroy {
   constructor(
     private taskService: TaskService,
     private toastService: ToastService,
-    private refreshTokenService: RefreshTokenService,
   ) {}
 
   ngOnDestroy(): void {
@@ -46,26 +44,5 @@ export class GetTasksService implements OnDestroy {
         }
       },
     });
-
-    // let authToken = localStorage.getItem('authToken');
-
-    // if (authToken) {
-    //   if (this.refreshTokenService.checkTokenExpired()) {
-    //     if (await (!this.refreshTokenService.tryRefreshingToken())) {
-    //       console.log('refresh failed');
-    //     } else {
-    //       console.log('refresh success');
-    //       this.getTasksAction();
-    //     }
-    //   } else {
-    //     console.log('no need refresh');
-    //     this.getTasksAction();
-    //   }
-    // } else {
-    //   this.logoutService.logout({
-    //     message: 'Please Login or Register.',
-    //     classname: 'bg-dark text-light',
-    //   });
-    // }
   }
 }

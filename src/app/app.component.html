@@ -11,10 +11,10 @@
     </div>
     <div *ngIf="authService.authStatus">
       <p class="text-light fs-5" style="display: inline">
-        Hello, <u>{{ authService.userName }}</u>!
+        Hello, {{ authService.userName }}!
       </p>
       <span class="px-2"></span>
-      <a class="btn btn-dark btn-lg me-1" (click)="logout()">Logout</a>
+      <a class="btn btn-dark btn-lg me-1" (click)="authService.logout()">Logout</a>
     </div>
   </div>
 </nav>
