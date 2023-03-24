@@ -23,6 +23,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.authService.authStatus) {
+      this.toastService.show({
+        message: 'Welcome Back!',
+        classname: 'bg-success text-light',
+        autohide: true,
+        delay: 5000,
+      });
       this.getTasksService.getLatestTasks();
     } else {
       this.toastService.show({
@@ -36,15 +42,29 @@ export class AppComponent implements OnInit, OnDestroy {
     this.toastService.clear();
   }
 
-  openRegisterModal(): void {
-    this.modalService.open(RegisterComponent, {
-      modalClass: 'modal-lg modal-dialog-centered',
+  openLoginModal(): void {
+    this.modalService.open(LoginComponent, {
+      modalClass: 'modal-dialog-centered',
     });
   }
 
-  openLoginModal(): void {
-    this.modalService.open(LoginComponent, {
-      modalClass: 'modal-lg modal-dialog-centered',
+  openRegisterModal(): void {
+    this.modalService.open(RegisterComponent, {
+      modalClass: 'modal-dialog-centered',
+    });
+  }
+
+  logout() {
+    this.toastService.show({
+      message: 'Logout Success.',
+      classname: 'bg-success text-light',
+      autohide: true,
+      delay: 5000,
+    });
+
+    this.toastService.show({
+      message: 'Please Login or Register.',
+      classname: 'bg-dark text-light',
     });
   }
 }

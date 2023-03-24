@@ -9,8 +9,8 @@
     <mdb-accordion-item *ngFor="let task of getTasksService.tasks">
       <ng-template mdbAccordionItemHeader>
         <p
-          style="display: inline"
           class="fw-bold"
+          style="display: inline"
           [ngClass]="
             currentDateTime > task.dueDate ? 'text-danger' : 'text-body'
           "
@@ -50,7 +50,10 @@
             Delete
           </button>
           <span class="ps-2"></span>
-          <button class="btn btn-success btn-lg" (click)="openUpdateModal(task)">
+          <button
+            class="btn btn-success btn-lg"
+            (click)="openUpdateModal(task)"
+          >
             <i class="bi bi-pencil-square"></i>
             Edit
           </button>

@@ -36,7 +36,6 @@ export class TaskListingComponent {
       category: taskToBeUpdated.category,
       description: taskToBeUpdated.description,
       dueDate: taskToBeUpdated.dueDate,
-      isDeleted: taskToBeUpdated.isDeleted,
       created: taskToBeUpdated.created,
       updated: taskToBeUpdated.updated,
     };

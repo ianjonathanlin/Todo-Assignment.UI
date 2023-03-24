@@ -4,7 +4,6 @@ export class Task {
     description?: string;
     dueDate!: Date;
     category!: string;
-    isDeleted?: boolean;
     created?: Date;
     updated?: Date;
 }

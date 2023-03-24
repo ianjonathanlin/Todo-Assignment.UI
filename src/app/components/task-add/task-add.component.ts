@@ -70,20 +70,25 @@ export class TaskAddComponent {
         this.getTasksService.getLatestTasks();
       },
       error: (err) => {
-        if (err.status == 401) {
-          this.toastService.show({
-            message: 'Unauthorized. Please try login again.',
-            classname: 'bg-dark text-light',
-            autohide: true,
-            delay: 10000,
-          });
-        } else {
-          this.toastService.show({
-            message: err.error,
-            classname: 'bg-danger text-light',
-            autohide: true,
-            delay: 10000,
-          });
+        this.modalRef.close();
+        
+        switch (err.status) {
+          case 0:
+            this.toastService.show({
+              message: 'Server is unreachable.',
+              classname: 'bg-danger text-light',
+              autohide: true,
+              delay: 10000,
+            });
+            break;
+          default:
+            this.toastService.show({
+              message: err.error,
+              classname: 'bg-danger text-light',
+              autohide: true,
+              delay: 10000,
+            });
+            break;
         }
       },
     });

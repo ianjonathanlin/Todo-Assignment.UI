@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
-import { IAuthenticatedResponse } from '../models/authResponse';
-import { IToken } from '../models/token';
 import { User } from '../models/user';
 import { GetTasksService } from './get-tasks.service';
 import { ToastService } from './toast.service';
-import jwt_decode from "jwt-decode";
+import { IAuthToken } from '../models/authToken';
+import { ITokens } from '../models/tokens';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -26,11 +26,9 @@ export class AuthService {
     let token = localStorage.getItem('authToken');
 
     if (token) {
-
-      let decodedJWT: IToken = jwt_decode(token);
-        this.authStatus = true;
-        this.userName = decodedJWT.userName;
-      
+      let decodedJWT: IAuthToken = jwt_decode(token);
+      this.authStatus = true;
+      this.userName = decodedJWT.userName;
     }
   }
 
@@ -38,14 +36,26 @@ export class AuthService {
     return this.http.post(`${environment.apiUrl}/${this.url}/register`, user);
   }
 
-  public authenticate(user: User): Observable<IAuthenticatedResponse> {
-    return this.http.post<IAuthenticatedResponse>(
+  public authenticate(user: User): Observable<ITokens> {
+    return this.http.post<ITokens>(
       `${environment.apiUrl}/${this.url}/authenticate`,
       user
     );
   }
 
-  logout() {
+  public refreshToken(): Observable<ITokens> {
+    const credentials: ITokens = {
+      authToken: localStorage.getItem('authToken')!,
+      refreshToken: localStorage.getItem('refreshToken')!,
+    };
+
+    return this.http.post<ITokens>(
+      `${environment.apiUrl}/${this.url}/refresh-token`,
+      credentials
+    );
+  }
+
+  public logout() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');
 
@@ -56,17 +66,5 @@ export class AuthService {
     this.userName = '';
 
     this.toastService.clear();
-
-    this.toastService.show({
-      message: 'Logout Success.',
-      classname: 'bg-success text-light',
-      autohide: true,
-      delay: 5000,
-    });
-
-    this.toastService.show({
-      message: 'Please Login or Register.',
-      classname: 'bg-dark text-light',
-    });
   }
 }

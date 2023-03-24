@@ -27,21 +27,35 @@ export class RegisterComponent {
     this.authService.register(this.registerUser).subscribe({
       next: () => {
         this.modalRef.close();
-        
+
         this.toastService.show({
-          message: "New user registered successfully.",
+          message: 'New user registered successfully.',
           classname: 'bg-success text-light',
           autohide: true,
           delay: 5000,
         });
       },
       error: (err) => {
-        this.toastService.show({
-          message: err.error,
-          classname: 'bg-danger text-light',
-          autohide: true,
-          delay: 10000,
-        });
+        this.modalRef.close();
+        
+        switch (err.status) {
+          case 0:
+            this.toastService.show({
+              message: 'Server is unreachable.',
+              classname: 'bg-danger text-light',
+              autohide: true,
+              delay: 10000,
+            });
+            break;
+          default:
+            this.toastService.show({
+              message: err.error,
+              classname: 'bg-danger text-light',
+              autohide: true,
+              delay: 10000,
+            });
+            break;
+        }
       },
     });
   }

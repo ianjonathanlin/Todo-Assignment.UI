@@ -7,14 +7,14 @@
     <div *ngIf="!authService.authStatus">
       <a class="btn btn-dark btn-lg me-1" (click)="openLoginModal()">Login</a>
       <span class="px-1"></span>
-      <a class="btn btn-secondary btn-lg me-1" (click)="openRegisterModal()">Register</a>
+      <a class="btn btn-warning btn-lg me-1" (click)="openRegisterModal()">Register</a>
     </div>
     <div *ngIf="authService.authStatus">
       <p class="text-light fs-5" style="display: inline">
         Hello, {{ authService.userName }}!
       </p>
       <span class="px-2"></span>
-      <a class="btn btn-dark btn-lg me-1" (click)="authService.logout()">Logout</a>
+      <a class="btn btn-dark btn-lg me-1" (click)="logout()">Logout</a>
     </div>
   </div>
 </nav>
