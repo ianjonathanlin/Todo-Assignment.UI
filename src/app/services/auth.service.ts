@@ -14,7 +14,15 @@ export class AuthService {
 
   private url = 'Authentication';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    let token = localStorage.getItem('authToken');
+
+    if (token) {
+      let decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
+      this.authStatus = true;
+      this.userName = decodedJWT.userName;
+    }
+  }
 
   public register(user: User): Observable<any> {
     return this.http.post(`${environment.apiUrl}/${this.url}/register`, user);

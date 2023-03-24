@@ -26,7 +26,9 @@ export class RegisterComponent {
   register(): void {
     this.authService.register(this.registerUser).subscribe({
       next: () => {
-        this.modalRef.close({
+        this.modalRef.close();
+        
+        this.toastService.show({
           message: "New user registered successfully.",
           classname: 'bg-success text-light',
           autohide: true,
@@ -34,7 +36,7 @@ export class RegisterComponent {
         });
       },
       error: (err) => {
-        this.modalRef.close({
+        this.toastService.show({
           message: err.error,
           classname: 'bg-danger text-light',
           autohide: true,

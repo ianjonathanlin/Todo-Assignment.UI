@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { IToast } from 'src/app/models/toast';
+import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { AuthService } from 'src/app/services/auth.service';
 import { GetTasksService } from 'src/app/services/get-tasks.service';
-import { ToastService } from 'src/app/services/toast.service';
 import { Task } from '../../models/task';
 import { TaskAddComponent } from '../task-add/task-add.component';
 import { TaskDeleteComponent } from '../task-delete/task-delete.component';
@@ -17,26 +15,17 @@ import { TaskUpdateComponent } from '../task-update/task-update.component';
 })
 export class TaskListingComponent {
   pageTitle = 'To-do Application';
-  modalRef: MdbModalRef<any> | null = null;
   currentDateTime = new Date();
 
   constructor(
     public getTasksService: GetTasksService,
-    private toastService: ToastService,
     private modalService: MdbModalService,
     public authService: AuthService
   ) {}
 
   openAddModal(): void {
-    this.modalRef = this.modalService.open(TaskAddComponent, {
+    this.modalService.open(TaskAddComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
-    });
-
-    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
-      if (toast) {
-        this.toastService.show(toast);
-      }
-      this.getTasksService.getLatestTasks();
     });
   }
 
@@ -53,7 +42,6 @@ export class TaskListingComponent {
     };
 
     let taskDueDate = new Date(taskToBeUpdated.dueDate);
-
     let ngbDateStruct: NgbDateStruct = {
       day: taskDueDate.getDate(),
       month: taskDueDate.getMonth() + 1,
@@ -65,7 +53,7 @@ export class TaskListingComponent {
       second: taskDueDate.getSeconds(),
     };
 
-    this.modalRef = this.modalService.open(TaskUpdateComponent, {
+    this.modalService.open(TaskUpdateComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
       data: {
         task: task,
@@ -73,26 +61,12 @@ export class TaskListingComponent {
         ngbTimeStruct: ngbTimeStruct,
       },
     });
-
-    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
-      if (toast) {
-        this.toastService.show(toast);
-      }
-      this.getTasksService.getLatestTasks();
-    });
   }
 
   openDeleteModal(taskToBeDeleted: Task): void {
-    this.modalRef = this.modalService.open(TaskDeleteComponent, {
+    this.modalService.open(TaskDeleteComponent, {
       modalClass: 'modal-dialog-centered',
       data: { task: taskToBeDeleted },
-    });
-
-    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
-      if (toast) {
-        this.toastService.show(toast);
-      }
-      this.getTasksService.getLatestTasks();
     });
   }
 }

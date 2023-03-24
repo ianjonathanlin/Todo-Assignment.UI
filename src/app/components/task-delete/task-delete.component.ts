@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { Task } from 'src/app/models/task';
-import { LogoutService } from 'src/app/services/logout.service';
+import { GetTasksService } from 'src/app/services/get-tasks.service';
 import { TaskService } from 'src/app/services/task.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-task-delete',
@@ -15,7 +16,8 @@ export class TaskDeleteComponent {
 
   constructor(
     private taskService: TaskService,
-    private logoutService: LogoutService,
+    private toastService: ToastService,
+    private getTasksService: GetTasksService,
     private modalRef: MdbModalRef<TaskDeleteComponent>
   ) {}
 
@@ -26,23 +28,27 @@ export class TaskDeleteComponent {
   deleteTaskAction(taskId: number): void {
     this.taskService.deleteTask(taskId).subscribe({
       next: () => {
-        this.modalRef.close({
+        this.modalRef.close();
+
+        this.toastService.show({
           message: 'Task deleted successfully',
           classname: 'bg-success text-light',
           autohide: true,
           delay: 5000,
         });
+        
+        this.getTasksService.getLatestTasks();
       },
       error: (err) => {
         if (err.status == 401) {
-          this.modalRef.close({
-            message: "Unauthorized access.",
-            classname: 'bg-danger text-light',
+          this.toastService.show({
+            message: 'Unauthorized. Please try login again.',
+            classname: 'bg-dark text-light',
             autohide: true,
             delay: 10000,
           });
         } else {
-          this.modalRef.close({
+          this.toastService.show({
             message: err.error,
             classname: 'bg-danger text-light',
             autohide: true,

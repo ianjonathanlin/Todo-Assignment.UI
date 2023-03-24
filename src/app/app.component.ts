@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { IToast } from './models/toast';
 import { AuthService } from './services/auth.service';
 import { GetTasksService } from './services/get-tasks.service';
 import { LogoutService } from './services/logout.service';
@@ -16,7 +15,6 @@ import { ToastService } from './services/toast.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   pageTitle = 'To-Do Application';
-  modalRef: MdbModalRef<any> | null = null;
 
   constructor(
     private modalService: MdbModalService,
@@ -28,16 +26,14 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    let token = localStorage.getItem('authToken');
-    if (token && !this.refreshTokenService.checkTokenExpired()) {
-      let decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
-      this.authService.authStatus = true;
-      this.authService.userName = decodedJWT.userName;
+    if (this.authService.authStatus) {
+      this.getTasksService.getLatestTasks();
     } else {
-      this.logoutService.logout(undefined);
+      this.toastService.show({
+        message: 'Please Login or Register.',
+        classname: 'bg-dark text-light',
+      });
     }
-
-    this.getTasksService.getLatestTasks();
   }
 
   ngOnDestroy(): void {
@@ -45,54 +41,18 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   openRegisterModal(): void {
-    this.modalRef = this.modalService.open(RegisterComponent, {
+    this.modalService.open(RegisterComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
-    });
-
-    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
-      if (toast) {
-        this.toastService.show(toast);
-      }
     });
   }
 
   openLoginModal(): void {
-    this.modalRef = this.modalService.open(LoginComponent, {
+    this.modalService.open(LoginComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
-    });
-
-    this.modalRef.onClose.subscribe((toast: IToast | undefined) => {
-      if (toast) {
-        let token = localStorage.getItem('authToken');
-
-        // If login success / acquired authToken
-        if (token) {
-          this.toastService.clear();
-          this.toastService.show(toast);
-
-          this.authService.authStatus = true;
-
-          let decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
-          this.authService.userName = decodedJWT.userName;
-
-          this.getTasksService.getLatestTasks();
-        } else {
-          this.toastService.show(toast);
-        }
-      }
     });
   }
 
   logout(): void {
-    let logoutToast: IToast = {
-      message: 'Logout Success.',
-      classname: 'bg-success text-light',
-      autohide: true,
-      delay: 5000,
-    };
-
-    this.logoutService.logout(logoutToast);
-
-    this.getTasksService.getLatestTasks();
+    this.logoutService.logout();
   }
 }

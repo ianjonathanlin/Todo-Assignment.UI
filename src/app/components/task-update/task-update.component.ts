@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { Task } from 'src/app/models/task';
-import { LogoutService } from 'src/app/services/logout.service';
+import { GetTasksService } from 'src/app/services/get-tasks.service';
 import { TaskService } from 'src/app/services/task.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-task-update',
@@ -18,7 +19,8 @@ export class TaskUpdateComponent {
 
   constructor(
     private taskService: TaskService,
-    private logoutService: LogoutService,
+    private toastService: ToastService,
+    private getTasksService: GetTasksService,
     private modalRef: MdbModalRef<TaskUpdateComponent>
   ) {}
 
@@ -33,31 +35,33 @@ export class TaskUpdateComponent {
       this.ngbDateStruct.day,
       this.ngbTimeStruct.hour,
       this.ngbTimeStruct.minute,
-      0 //second
+      0 //ngbTimeStruct.second
     );
     this.task.dueDate = isoDate;
 
-    console.log(this.task);
-
     this.taskService.updateTask(this.task.id!, this.task).subscribe({
       next: () => {
-        this.modalRef.close({
+        this.modalRef.close();
+
+        this.toastService.show({
           message: 'Task updated successfully.',
           classname: 'bg-success text-light',
           autohide: true,
           delay: 5000,
         });
+        
+        this.getTasksService.getLatestTasks();
       },
       error: (err) => {
         if (err.status == 401) {
-          this.modalRef.close({
-            message: "Unauthorized access.",
-            classname: 'bg-danger text-light',
+          this.toastService.show({
+            message: 'Unauthorized. Please try login again.',
+            classname: 'bg-dark text-light',
             autohide: true,
             delay: 10000,
           });
         } else {
-          this.modalRef.close({
+          this.toastService.show({
             message: err.error,
             classname: 'bg-danger text-light',
             autohide: true,
