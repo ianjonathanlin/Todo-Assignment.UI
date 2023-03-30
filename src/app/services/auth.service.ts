@@ -55,6 +55,26 @@ export class AuthService {
     );
   }
 
+  public checkTokenExpiry(): boolean {
+    let authToken = localStorage.getItem('authToken');
+
+    if (authToken != null) {
+      let decodedJWT: IAuthToken = jwt_decode(authToken);
+      let expiryDate = new Date(0);
+      expiryDate.setUTCSeconds(decodedJWT.exp);
+
+      let currentDateTime = new Date();
+
+      if (expiryDate > currentDateTime) {
+        this.authStatus = true;
+        this.userName = decodedJWT.userName;
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public logout() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');

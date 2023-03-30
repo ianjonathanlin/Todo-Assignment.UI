@@ -22,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.authStatus) {
+    if (this.authService.checkTokenExpiry()) {
       this.toastService.show({
         message: 'Welcome Back!',
         classname: 'bg-success text-light',
@@ -31,6 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
       });
       this.getTasksService.getLatestTasks();
     } else {
+      this.authService.logout();
       this.toastService.show({
         message: 'Please Login or Register.',
         classname: 'bg-dark text-light',
@@ -61,7 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
       autohide: true,
       delay: 5000,
     });
-
     this.toastService.show({
       message: 'Please Login or Register.',
       classname: 'bg-dark text-light',
